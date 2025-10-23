@@ -1,16 +1,36 @@
 package com.edigest.myfirstproject.entity;
 
-public class journalEntry {
+import org.bson.types.ObjectId;
+import org.springframework.data.annotation.Id;
+import org.springframework.data.mongodb.core.mapping.Document;
 
-    private long id;
+import java.time.LocalDateTime;
+import java.util.Date;
+
+//@Document tells Spring Boot that this class represents a MongoDB collection.
+@Document(collection = "journal_Entries")
+public class journalEntry {
+    @Id //to map as primary (unique) key
+    private ObjectId id;
     private String title;
     private String content;
+    private LocalDateTime date;
 
-    public long getId() {
+
+    public LocalDateTime getDate() {
+        return date;
+    }
+
+    public void setDate(LocalDateTime date) {
+        this.date = date;
+    }
+
+
+    public ObjectId getId() {
         return id;
     }
 
-    public void setId(long id) {
+    public void setId(ObjectId id) {
         this.id = id;
     }
 
