@@ -4,13 +4,12 @@ import com.edigest.myfirstproject.entity.journalEntry;
 import com.edigest.myfirstproject.service.journalEntryService;
 import org.bson.types.ObjectId;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.time.LocalDateTime;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 @RestController
 @RequestMapping("/journal")
@@ -26,16 +25,30 @@ public class appEntryControllerV2 {
         return journalEntryService.getALL();
     }
 
+
+    //ResponseEntity<journalEntry> we can give <?> also if we don't know the enties
     @PostMapping
-    public boolean createEntry(@RequestBody journalEntry myEntry){
-       myEntry.setDate(LocalDateTime.now());
-       journalEntryService.saveEntry(myEntry);
-       return true;
+    public ResponseEntity<journalEntry> createEntry(@RequestBody journalEntry myEntry){
+        try {
+            myEntry.setDate(LocalDateTime.now());
+            journalEntryService.saveEntry(myEntry);
+            return new ResponseEntity<>(myEntry, HttpStatus.CREATED);
+        } catch (Exception e) {
+            return new ResponseEntity<>(myEntry, HttpStatus.BAD_REQUEST);
+        }
     }
 
     @GetMapping("id/{myId}")
-    public journalEntry getJournalEntryById(@PathVariable ObjectId myId){
-        return  journalEntryService.findById(myId).orElse(null);
+    public ResponseEntity<journalEntry> getJournalEntryById(@PathVariable ObjectId myId){
+//        return  journalEntryService.findById(myId).orElse(null);
+        //now we send custom status code also
+        Optional<journalEntry> journalEntry = journalEntryService.findById(myId);
+
+        if(journalEntry.isPresent()){
+            return new ResponseEntity<>(journalEntry.get(), HttpStatus.OK);
+        }
+        return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+
     }
 
     @DeleteMapping("id/{myId}")
