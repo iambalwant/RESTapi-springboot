@@ -2,6 +2,7 @@ package com.edigest.myfirstproject.entity;
 
 import lombok.Data;
 import lombok.Getter;
+import lombok.NonNull;
 import lombok.Setter;
 import org.bson.types.ObjectId;
 import org.springframework.data.annotation.Id;
@@ -18,6 +19,7 @@ import java.util.Date;
 public class journalEntry {
     @Id //to map as primary (unique) key
     private ObjectId id;
+    @NonNull
     private String title;
     private String content;
     private LocalDateTime date;

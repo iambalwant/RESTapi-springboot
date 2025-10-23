@@ -1,6 +1,7 @@
 package com.edigest.myfirstproject.service;
 
 import com.edigest.myfirstproject.entity.journalEntry;
+import com.edigest.myfirstproject.entity.userEntry;
 import com.edigest.myfirstproject.repository.journalEntryRepository;
 import org.bson.types.ObjectId;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -15,7 +16,15 @@ public class journalEntryService {
 
     @Autowired
     private journalEntryRepository journalEntryRepository;
+    @Autowired
+    private userService userService;
 
+    public void saveEntry(journalEntry journalEntry, String username){
+        userEntry user = userService.findByusername(username);
+        journalEntry save = journalEntryRepository.save(journalEntry);
+        user.getJournalEntries().add(save);
+        userService.saveEntry(user);
+    }
     public void saveEntry(journalEntry journalEntry){
         journalEntryRepository.save(journalEntry);
     }
@@ -28,7 +37,10 @@ public class journalEntryService {
     public Optional<journalEntry> findById(ObjectId id){
         return journalEntryRepository.findById(id);
     }
-    public void deleteById(ObjectId id){
+    public void deleteById(ObjectId id, String username){
+        userEntry user = userService.findByusername(username);
+        user.getJournalEntries().removeIf(x -> x.getId().equals(id));
+        userService.saveEntry(user);
         journalEntryRepository.deleteById(id);
     }
 
