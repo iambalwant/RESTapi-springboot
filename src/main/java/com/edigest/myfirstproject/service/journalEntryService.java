@@ -6,6 +6,7 @@ import com.edigest.myfirstproject.repository.journalEntryRepository;
 import org.bson.types.ObjectId;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 import java.util.Optional;
@@ -19,6 +20,7 @@ public class journalEntryService {
     @Autowired
     private userService userService;
 
+    @Transactional
     public void saveEntry(journalEntry journalEntry, String username){
         userEntry user = userService.findByusername(username);
         journalEntry save = journalEntryRepository.save(journalEntry);
