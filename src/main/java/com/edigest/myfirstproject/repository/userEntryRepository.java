@@ -18,4 +18,5 @@ public interface userEntryRepository extends MongoRepository<userEntry, ObjectId
 //List<userEntry> findByAgeBetween(int start, int end);
 //Automatically generates queries like { "age": { "$gt": 18 } }
     userEntry findByusername(String username);
+    void deleteByUsername(String username);
 }

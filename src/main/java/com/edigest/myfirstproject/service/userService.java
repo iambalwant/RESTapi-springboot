@@ -4,8 +4,11 @@ import com.edigest.myfirstproject.entity.userEntry;
 import com.edigest.myfirstproject.repository.userEntryRepository;
 import org.bson.types.ObjectId;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Component;
 
+import java.util.Arrays;
 import java.util.List;
 import java.util.Optional;
 
@@ -16,9 +19,19 @@ public class userService {
     @Autowired
     private userEntryRepository userEntryRepository;
 
+    private static final PasswordEncoder passwordEncoder = new BCryptPasswordEncoder();
+
+
     public void saveEntry(userEntry userEntry){
+        userEntry.setPassword(passwordEncoder.encode(userEntry.getPassword()));
+        userEntry.setRoles(List.of("user"));
         userEntryRepository.save(userEntry);
     }
+    public void saveNewUser(userEntry userEntry){
+
+        userEntryRepository.save(userEntry);
+    }
+
     public List<userEntry> getALL(){
         return userEntryRepository.findAll();
     }
