@@ -39,7 +39,7 @@ public class userEntryControllerV2 {
         if(userInDB != null){
             userInDB.setUsername(user.getUsername());
             userInDB.setPassword(user.getPassword());
-            userService.saveEntry(userInDB);
+            userService.saveNewUser(userInDB);
         }
         return new ResponseEntity<>(HttpStatus.NO_CONTENT);
     }

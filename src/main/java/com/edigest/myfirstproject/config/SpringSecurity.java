@@ -33,6 +33,7 @@ public class SpringSecurity{
                 .csrf(csrf -> csrf.disable()) // disable CSRF for simplicity
                 .authorizeHttpRequests(auth -> auth
                         .requestMatchers("/journal/**", "/user/**").authenticated()  // allow public endpoints
+                        .requestMatchers("/admin/**").hasRole("ADMIN")
                         .anyRequest().permitAll()// secure all others
 
                 )

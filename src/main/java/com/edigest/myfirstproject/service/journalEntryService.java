@@ -34,17 +34,25 @@ public class journalEntryService {
     public List<journalEntry> getALL(){
         return journalEntryRepository.findAll();
     }
+
 //option means data may be there or not kind of ? in Js
-    //.findById(id).orElse(null) is same
+//.findById(id).orElse(null) is same
+
     public Optional<journalEntry> findById(ObjectId id){
         return journalEntryRepository.findById(id);
     }
+
+
     public void deleteById(ObjectId id, String username){
         userEntry user = userService.findByusername(username);
-        user.getJournalEntries().removeIf(x -> x.getId().equals(id));
-        userService.saveEntry(user);
-        journalEntryRepository.deleteById(id);
+        boolean removed = user.getJournalEntries().removeIf(x -> x.getId().equals(id));
+        if(removed){
+            userService.saveEntry(user);
+            journalEntryRepository.deleteById(id);
+        }
+
     }
+
 
 }
 

@@ -23,12 +23,16 @@ public class userService {
 
 
     public void saveEntry(userEntry userEntry){
-        userEntry.setPassword(passwordEncoder.encode(userEntry.getPassword()));
-        userEntry.setRoles(List.of("user"));
         userEntryRepository.save(userEntry);
     }
     public void saveNewUser(userEntry userEntry){
-
+        userEntry.setPassword(passwordEncoder.encode(userEntry.getPassword()));
+        userEntry.setRoles(List.of("USER"));
+        userEntryRepository.save(userEntry);
+    }
+    public void saveNewAdmin(userEntry userEntry){
+        userEntry.setPassword(passwordEncoder.encode(userEntry.getPassword()));
+        userEntry.setRoles(List.of("USER","ADMIN"));
         userEntryRepository.save(userEntry);
     }
 
