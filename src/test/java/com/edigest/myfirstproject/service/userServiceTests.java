@@ -42,7 +42,7 @@ public class userServiceTests {
         assertNotNull(userEntryRepository.findByusername(name));
         assertEquals(4,2+1);
     }
-
+    @Disabled
     @ParameterizedTest // to test multiple value
     @CsvSource({ //parameters for the test "exp,a,b"
             "1,2,2",

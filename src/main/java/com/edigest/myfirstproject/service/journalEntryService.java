@@ -4,15 +4,18 @@ import com.edigest.myfirstproject.entity.journalEntry;
 import com.edigest.myfirstproject.entity.userEntry;
 import com.edigest.myfirstproject.repository.journalEntryRepository;
 import org.bson.types.ObjectId;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
+import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 import java.util.Optional;
 
 //here we are going to write our business service
-@Component
+@Service
 public class journalEntryService {
 
     @Autowired
@@ -20,12 +23,17 @@ public class journalEntryService {
     @Autowired
     private userService userService;
 
+
     @Transactional
     public void saveEntry(journalEntry journalEntry, String username){
-        userEntry user = userService.findByusername(username);
-        journalEntry save = journalEntryRepository.save(journalEntry);
-        user.getJournalEntries().add(save);
-        userService.saveEntry(user);
+        try {
+            userEntry user = userService.findByusername(username);
+            journalEntry save = journalEntryRepository.save(journalEntry);
+            user.getJournalEntries().add(save);
+            userService.saveEntry(user);
+        } catch (Exception e) {
+            throw new RuntimeException(e);
+        }
     }
     public void saveEntry(journalEntry journalEntry){
         journalEntryRepository.save(journalEntry);

@@ -23,6 +23,8 @@ public class userEntry {
     @Indexed(unique = true) //it will not create automatically set true in application.property
     @NonNull
     private String username;
+    private String email;
+    private boolean sentimentAnalysis;
     @NonNull
     private String password;
     @DBRef

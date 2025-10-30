@@ -28,6 +28,9 @@
 	</scm>
 	<properties>
 		<java.version>17</java.version>
+		<sonar.host.url>http://localhost:9000</sonar.host.url>
+		<sonar.projectKey>myfirstproject</sonar.projectKey>
+		<sonar.token>squ_57be5c89349e1600f263140895d3dce063cf7e22</sonar.token>
 	</properties>
 	<dependencies>
 			<dependency>
@@ -72,6 +75,11 @@
 			<plugin>
 				<groupId>org.springframework.boot</groupId>
 				<artifactId>spring-boot-maven-plugin</artifactId>
+			</plugin>
+			<plugin>
+				<groupId>org.sonarsource.scanner.maven</groupId>
+				<artifactId>sonar-maven-plugin</artifactId>
+				<version>3.7.0.1746</version>
 			</plugin>
 		</plugins>
 	</build>
