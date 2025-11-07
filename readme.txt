@@ -34,3 +34,6 @@ server.port=9090
 
 Now your app will start on
 http://localhost:9090
+
+guide :-
+https://www.codingshuttle.com/spring-boot-handbook/spring-boot-tutorial-a-comprehensive-guide-for-beginners/

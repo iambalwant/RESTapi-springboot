@@ -1,5 +1,6 @@
 package com.edigest.myfirstproject.config;
 
+import com.edigest.myfirstproject.filter.JwtFilter;
 import com.edigest.myfirstproject.service.UserDetailServicimpl;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
@@ -10,17 +11,22 @@ import org.springframework.security.config.annotation.authentication.builders.Au
 import org.springframework.security.config.annotation.authentication.configuration.AuthenticationConfiguration;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
+import org.springframework.security.config.annotation.web.configurers.AbstractHttpConfigurer;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
+import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 
 
 @Configuration
 @EnableWebSecurity
-public class SpringSecurity{
+public class SpringSecurity {
 
     @Autowired
     private UserDetailServicimpl userDetailServicimpl;
+
+    @Autowired
+    private JwtFilter jwtFilter;
 
 
     public SpringSecurity(UserDetailServicimpl userDetailServicimpl) {
@@ -30,15 +36,24 @@ public class SpringSecurity{
     @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
         http
-                .csrf(csrf -> csrf.disable()) // disable CSRF for simplicity
+                // Disable CSRF for stateless JWT authentication
+                .csrf(AbstractHttpConfigurer::disable)
+
+                // Configure authorization rules
                 .authorizeHttpRequests(auth -> auth
-                        .requestMatchers("/journal/**", "/user/**").authenticated()  // allow public endpoints
+                        .requestMatchers("/public/**").permitAll()
+                        .requestMatchers("/journal/**", "/user/**").authenticated()
                         .requestMatchers("/admin/**").hasRole("ADMIN")
-                        .anyRequest().permitAll()// secure all others
-
+                        .anyRequest().permitAll()
                 )
-                .httpBasic(Customizer.withDefaults()); // default login form
 
+                // Enable basic authentication (optional)
+//                .httpBasic(Customizer.withDefaults())
+
+                // Add your JWT filter before UsernamePasswordAuthenticationFilter
+                .addFilterBefore(jwtFilter, UsernamePasswordAuthenticationFilter.class);
+
+        // Build the filter chain
         return http.build();
     }
 
